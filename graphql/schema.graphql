@@ -85,8 +85,8 @@ type Mutation {
   detachEquipmentFromBuilding(building_id: ID! @eq, equipment_id: ID! @eq): Building!
 
   # Apartments
-  createApartment(input: Apartment! @spread): Apartment! @create
-  editApartment(id: ID! @eq, input: Apartment! @spread): Apartment! @update
+  createApartment(input: apartmentInput! @spread): Apartment! @create
+  editApartment(id: ID! @eq, input: apartmentInput! @spread): Apartment! @update
   deleteApartment(id: ID! @eq): Apartment @delete
   attachOptionToApartment(apartment_id: ID! @eq, option_id: ID! @eq): Apartment!
   detachOptionFromApartment(apartment_id: ID! @eq, option_id: ID! @eq): Apartment!
@@ -124,8 +124,8 @@ type Mutation {
   deleteTenant(id: ID! @eq): Tenant @delete
 
   # Rent Receipts
-  createRentReceipt(input: RentReceipt! @spread): RentReceipt! @create
-  editRentReceipt(id: ID! @eq, input: RentReceipt! @spread): RentReceipt! @update
+  createRentReceipt(input: rentReceiptInput! @spread): RentReceipt! @create
+  editRentReceipt(id: ID! @eq, input: rentReceiptInput! @spread): RentReceipt! @update
   deleteRentReceipt(id: ID! @eq): RentReceipt @delete
 }
 
@@ -140,7 +140,7 @@ input buildingInput {
   syndicate_id: ID!
 }
 
-input Apartment {
+input apartmentInput {
   apartment_number: Int!
   max_tenants: Int!
   price: Int!
@@ -177,6 +177,14 @@ input tenantInput {
   person_id: ID!
   apartment_id: ID!
   principal_tenant: Boolean!
+}
+
+input rentReceiptInput {
+  apartment_id: ID!
+  tenant_id: ID!
+  issued: DateTime
+  payed: DateTime
+  total: Int!
 }
 
 "======= TYPES ======="
