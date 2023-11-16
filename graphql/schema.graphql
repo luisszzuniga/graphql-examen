@@ -1,0 +1,186 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"======= QUERIES ======="
+type Query {
+  # List all apartments
+  apartments: [Apartment!]! @all
+
+  # List all buildings
+  buildings: [Building!]! @all
+
+  # List all syndicates
+  syndicates: [Syndicate!]! @all
+
+  # List all tenants
+  tenants: [Tenant!]! @all
+
+  # List all owners
+  owners: [Owner!]! @all
+
+  # List all apartment types
+  apartmentTypes: [ApartmentType!]! @all
+
+  # List all options
+  options: [Option!]! @all
+
+  # List all equipments
+  equipments: [Equipment!]! @all
+
+  # List all persons
+  persons: [Person!]! @all
+
+  # List all rent receipts
+  rentReceipts: [RentReceipt!]! @all
+
+  # List all owners and tenants
+  ownerAndTenants: [OwnerAndTenantView!]! @all
+
+  # Get a specific apartment by id
+  apartment(id: ID! @eq): Apartment @find
+
+  # Get a specific building by id
+  building(id: ID! @eq): Building @find
+
+  # Get a specific syndicate by id
+  syndicate(id: ID! @eq): Syndicate @find
+
+  # Get a specific tenant by id
+  tenant(id: ID! @eq): Tenant @find
+
+  # Get a specific owner by id
+  owner(id: ID! @eq): Owner @find
+
+  # Get a specific apartment type by id
+  apartmentType(id: ID! @eq): ApartmentType @find
+
+  # Get a specific option by id
+  option(id: ID! @eq): Option @find
+
+  # Get a specific equipment by id
+  equipment(id: ID! @eq): Equipment @find
+
+  # Get a specific person by id
+  person(id: ID! @eq): Person @find
+
+  # Get a specific rent receipt by id
+  rentReceipt(id: ID! @eq): RentReceipt @find
+
+  # Get a specific owner or tenant by id
+  ownerAndTenant(id: ID! @eq): OwnerAndTenantView @find
+}
+
+# "======= MUTATIONS ======="
+# type Mutation {
+  
+# }
+
+"======= TYPES ======="
+type Apartment {
+  id: ID!
+  options: [Option!]! @hasMany
+  building: Building @belongsTo
+  apartmentType: ApartmentType @belongsTo
+  owner: Owner @belongsTo
+  tenants: [Tenant!]! @hasMany
+  principal_tenant: Tenant @hasOne
+  apartment_number: Int!
+  max_tenants: Int!
+  price: Int!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type ApartmentType {
+  id: ID!
+  name: String!
+  apartments: [Apartment!]! @hasMany
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Building {
+  id: ID!
+  syndicate: Syndicate @belongsTo
+  equipments: [Equipment!]! @hasMany
+  name: String!
+  address: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Equipment {
+  id: ID!
+  name: String!
+  buildings: [Building!]! @hasMany
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Option {
+  id: ID!
+  name: String!
+  apartments: [Apartment!]! @hasMany
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Owner {
+  id: ID!
+  apartments: [Apartment!]! @hasMany
+  person: Person @belongsTo
+  account_number: String!
+  pays_tva: Boolean!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Tenant {
+  id: ID!
+  person: Person @belongsTo
+  apartment: Apartment @belongsTo
+  principal_tenant: Boolean!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Person {
+  id: ID!
+  firstname: String!
+  lastname: String!
+  email: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type OwnerAndTenantView {
+  person_id: ID!
+  email: String!
+  firstname: String!
+  lastname: String!
+  owner_id: ID
+  account_number: String
+  pays_tva: Boolean
+  tenant_id: ID
+  apartment: Apartment @belongsTo
+  principal_tenant: Boolean
+}
+
+type RentReceipt {
+  id: ID!
+  apartment: Apartment @belongsTo
+  tenant: Tenant @belongsTo
+  issued: DateTime
+  payed: DateTime
+  total: Int!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Syndicate {
+  id: ID!
+  name: String!
+  buildings: [Building!]! @hasMany
+  created_at: DateTime!
+  updated_at: DateTime!
+}
