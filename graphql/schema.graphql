@@ -70,10 +70,114 @@ type Query {
   ownerAndTenant(id: ID! @eq): OwnerAndTenantView @find
 }
 
-# "======= MUTATIONS ======="
-# type Mutation {
-  
-# }
+"======= MUTATIONS ======="
+type Mutation {
+  # Syndicates
+  createSyndicate(input: syndicateInput! @spread): Syndicate! @create
+  editSyndicate(id: ID! @eq, input: syndicateInput! @spread): Syndicate! @update
+  deleteSyndicate(id: ID! @eq): Syndicate @delete
+
+  # Buildings
+  createBuilding(input: buildingInput! @spread): Building! @create
+  editBuilding(id: ID! @eq, input: buildingInput! @spread): Building! @update
+  deleteBuilding(id: ID! @eq): Building @delete
+  attachEquipmentToBuilding(building_id: ID! @eq, equipment_id: ID! @eq): Building!
+  detachEquipmentFromBuilding(building_id: ID! @eq, equipment_id: ID! @eq): Building!
+
+  # Apartments
+  createApartment(input: Apartment! @spread): Apartment! @create
+  editApartment(id: ID! @eq, input: Apartment! @spread): Apartment! @update
+  deleteApartment(id: ID! @eq): Apartment @delete
+  attachOptionToApartment(apartment_id: ID! @eq, option_id: ID! @eq): Apartment!
+  detachOptionFromApartment(apartment_id: ID! @eq, option_id: ID! @eq): Apartment!
+  attachApartmentTypeToApartment(apartment_id: ID! @eq, apartment_type_id: ID! @eq): Apartment!
+  detachApartmentTypeFromApartment(apartment_id: ID! @eq, apartment_type_id: ID! @eq): Apartment!
+
+  # Apartment Types
+  createApartmentType(input: apartmentTypeInput! @spread): ApartmentType! @create
+  editApartmentType(id: ID! @eq, input: apartmentTypeInput! @spread): ApartmentType! @update
+  deleteApartmentType(id: ID! @eq): ApartmentType @delete
+
+  # Apartment Options
+  createOption(input: apartmentTypeInput! @spread): Option! @create
+  editOption(id: ID! @eq, input: apartmentTypeInput! @spread): Option! @update
+  deleteOption(id: ID! @eq): Option @delete
+
+  # Equipments
+  createEquipment(input: equipmentInput! @spread): Equipment! @create
+  editEquipment(id: ID! @eq, input: equipmentInput! @spread): Equipment! @update
+  deleteEquipment(id: ID! @eq): Equipment @delete
+
+  # Persons
+  createPerson(input: personInput! @spread): Person! @create
+  editPerson(id: ID! @eq, input: personInput! @spread): Person! @update
+  deletePerson(id: ID! @eq): Person @delete
+
+  # Owners
+  createOwner(input: ownerInput! @spread): Owner! @create
+  editOwner(id: ID! @eq, input: ownerInput! @spread): Owner! @update
+  deleteOwner(id: ID! @eq): Owner @delete
+
+  # Tenants
+  createTenant(input: tenantInput! @spread): Tenant! @create
+  editTenant(id: ID! @eq, input: tenantInput! @spread): Tenant! @update
+  deleteTenant(id: ID! @eq): Tenant @delete
+
+  # Rent Receipts
+  createRentReceipt(input: RentReceipt! @spread): RentReceipt! @create
+  editRentReceipt(id: ID! @eq, input: RentReceipt! @spread): RentReceipt! @update
+  deleteRentReceipt(id: ID! @eq): RentReceipt @delete
+}
+
+"======= INPUTS ======="
+input syndicateInput {
+  name: String!
+}
+
+input buildingInput {
+  name: String!
+  address: String!
+  syndicate_id: ID!
+}
+
+input Apartment {
+  apartment_number: Int!
+  max_tenants: Int!
+  price: Int!
+  building_id: ID!
+  apartment_type_id: ID!
+  owner_id: ID!
+}
+
+input apartmentTypeInput {
+  name: String!
+}
+
+input optionInput {
+  name: String!
+}
+
+input equipmentInput {
+  name: String!
+}
+
+input personInput {
+  firstname: String!
+  lastname: String!
+  email: String!
+}
+
+input ownerInput {
+  person_id: ID!
+  account_number: String!
+  pays_tva: Boolean!
+}
+
+input tenantInput {
+  person_id: ID!
+  apartment_id: ID!
+  principal_tenant: Boolean!
+}
 
 "======= TYPES ======="
 type Apartment {
