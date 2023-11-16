@@ -11,6 +11,19 @@ class Tenant extends Model
 {
     use HasFactory;
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($tenant) {
+            if ($tenant->principal_tenant) {
+                $tenant->apartment->tenants()
+                    ->where('id', '<>', $tenant->id)
+                    ->update(['principal_tenant' => false]);
+            }
+        });
+    }
+
     public function apartment(): BelongsTo
     {
         return $this->belongsTo(Apartment::class);
